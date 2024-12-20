@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import com.security.spring_security.persistence.entity.PermissionEntity;
 import com.security.spring_security.persistence.entity.RoleEntity;
 import com.security.spring_security.persistence.entity.RoleEnum;
+import com.security.spring_security.persistence.entity.UserEntity;
 import com.security.spring_security.persistence.repository.UserRepository;
 
 @SpringBootApplication
@@ -55,6 +56,30 @@ public class SpringSecurityApplication {
 					.build();
 			RoleEntity roleDeveloper = RoleEntity.builder().roleEnum(RoleEnum.DEVELOPER)
 					.permissionList(Set.of(readPermission, updatePermission, deletePermission, refactorPermission))
+					.build();
+			// CREATE USER
+			UserEntity userSantiago = UserEntity.builder()
+					.username("Santiago")
+					.password("1234")
+					// si el usuario esta activo
+					.isEnabled(true)
+					// la cuanta no a expirado
+					.accountNonExpired(true)
+					// la cuenta no esta bloqueada
+					.accountNonLocked(true)
+					// credenciales no expiradas
+					.credentialNoexpired(true)
+					.roles(Set.of(roleAdmin))
+					.build();
+
+			UserEntity userJuan = UserEntity.builder()
+					.username("Juan")
+					.password("1234")
+					.isEnabled(true)
+					.accountNonExpired(true)
+					.accountNonLocked(true)
+					.credentialNoexpired(true)
+					.roles(Set.of(roleUser))
 					.build();
 
 		};
