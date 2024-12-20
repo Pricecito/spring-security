@@ -6,13 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,12 +32,45 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     //Anotación para crear un bean de seguridad
+    // @Bean
+    // //Metodo para configurar la cadena de filtros de seguridad o SecurityFilterChain
+    // public SecurityFilterChain securityFilterChain(/*Objeto que pasa por todos los filtros*/HttpSecurity httpSecurity) throws Exception {
+    //     //aqui se definen las condiciones de seguridad
+    //     return httpSecurity
+    //         .csrf(csrf -> csrf.disable())
+    //         //para loguearnos usando user and password
+    //         .httpBasic(Customizer.withDefaults())
+    //         //para que no se guarde la sesión en la BD para eliminar token de autorizacion
+    //         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    //         //el endpoint hello se le permitira a todo mundo 
+    //         .authorizeHttpRequests(http -> /*cubrir endpoint*/{
+    //             //configurando endpoints publicos
+    //             http.requestMatchers(HttpMethod.GET, "/auth/hello").permitAll();
+    //             // condifugrar endpoints privados
+    //             //el endpoint hello-secured tiene que tener el permiso de lectura
+    //             http.requestMatchers(HttpMethod.GET, "/auth/hello-secured").hasAuthority("CREATE");
+    //             //configurar endpoints no especificados o resto
+    //             //cualquier otro request diferente e los de arriba
+    //             http.anyRequest().denyAll(); //o authenticated() para los autenticados mientras que danyAll denegara el permiso a todos
+    //         })
+    //     .build();
+    // }
+
+    //trabajar con anotaciones de seguridad
     @Bean
-    //Metodo para configurar la cadena de filtros de seguridad o SecurityFilterChain
+     //Metodo para configurar la cadena de filtros de seguridad o SecurityFilterChain
     public SecurityFilterChain securityFilterChain(/*Objeto que pasa por todos los filtros*/HttpSecurity httpSecurity) throws Exception {
-        
-        return httpSecurity.build();
-    }
+         //aqui se definen las condiciones de seguridad
+         return httpSecurity
+             .csrf(csrf -> csrf.disable())
+             //para loguearnos usando user and password
+             .httpBasic(Customizer.withDefaults())
+             //para que no se guarde la sesión en la BD para eliminar token de autorizacion
+             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+             
+         .build();
+     }
+
 
     //definimios el authenticationManager
     @Bean
